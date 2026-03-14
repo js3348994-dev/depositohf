@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Blocos</title>
+<link rel="stylesheet" href="coisas/style.css">
+</head>
+
+<body>
+
+<section class="page" id="home">
+    <div class="pesquisa">
+    <input id="pesquisa" placeholder="Pesquisar..." onkeyup="pesquisar()">
+    </div>
+    <div class="conteiner">
+        <div class="container" id="container"></div>
+
+    </div>
+
+
+
+</section>
+
+<section class="page" id="creat">
+    <button id="btn" class="btn-creat"><ion-icon name="add-outline"></ion-icon></button>
+    <div class="creat"  id="caixa">
+    <div class="creat-creat" >
+    <button id="btn-sair">x</button>
+       
+    
+    <input id="titulo" placeholder="Título">
+
+    <textarea id="desc" placeholder="Descrição"></textarea>
+
+     
+     <label for="foto" class="btn">Escolher imagem</label>
+
+     <button id="btn-criar" onclick="criarBloco()">Criar bloco</button></div>
+     </div>
+
+
+</section>
+
+
+<input type="file" id="foto" accept="image/*" hidden>
+
+
+
+
+<div class="navegation">
+    <ul>
+        <li><a href="#home"><ion-icon name="home-outline"></ion-icon></a></li>
+        <li><a href="#creat"><ion-icon name="add-circle-outline"></ion-icon></a></li>
+    </ul>
+</div>
+
+
+<script>
+
+let blocos = JSON.parse(localStorage.getItem("blocos")) || []
+
+function salvar(){
+localStorage.setItem("blocos", JSON.stringify(blocos))
+}
+
+function criarBloco(){
+
+let titulo = document.getElementById("titulo").value
+let desc = document.getElementById("desc").value
+let arquivo = document.getElementById("foto").files[0]
+
+if(!arquivo){
+alert("Escolha uma imagem")
+return
+}
+
+let leitor = new FileReader()
+
+leitor.onload = function(e){
+
+let foto = e.target.result
+
+blocos.push({
+titulo,
+desc,
+foto
+})
+
+salvar()
+render()
+
+}
+
+leitor.readAsDataURL(arquivo)
+
+}
+
+function render(lista = blocos){
+
+let container = document.getElementById("container")
+
+container.innerHTML=""
+
+lista.forEach((b,i)=>{
+
+let div = document.createElement("div")
+div.className="card"
+
+div.innerHTML=`
+<img src="${b.foto}">
+<h3>${b.titulo}</h3>
+<p>${b.desc}</p>
+
+<div class="btns">
+<button class="edit" onclick="editar(${i})">Editar</button>
+<button class="delete" onclick="deletar(${i})">Apagar</button>
+</div>
+`
+
+container.appendChild(div)
+
+})
+
+}
+
+function editar(i){
+
+let novoTitulo = prompt("Novo título", blocos[i].titulo)
+let novaDesc = prompt("Nova descrição", blocos[i].desc)
+
+if(novoTitulo !== null){
+blocos[i].titulo = novoTitulo
+}
+
+if(novaDesc !== null){
+blocos[i].desc = novaDesc
+}
+
+salvar()
+render()
+
+}
+
+function deletar(i){
+
+if(confirm("Apagar bloco?")){
+blocos.splice(i,1)
+salvar()
+render()
+}
+
+}
+
+function pesquisar(){
+
+let texto = document.getElementById("pesquisa").value.toLowerCase()
+
+let resultado = blocos.filter(b =>
+b.titulo.toLowerCase().includes(texto) ||
+b.desc.toLowerCase().includes(texto)
+)
+
+render(resultado)
+
+}
+
+render()
+
+</script>
+<script  type = "module"  src = " https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js " > </script> 
+<script nomodule src = " https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js " >   </script>
+<script src="coisas/script.js"></script>
+
+</body>
+</html>
