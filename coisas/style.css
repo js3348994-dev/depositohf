@@ -139,7 +139,6 @@ color:white;
     justify-content: center;
     align-items: center;
     z-index: 2;
-    border: solid;
     position: relative;
 }
 .container{
