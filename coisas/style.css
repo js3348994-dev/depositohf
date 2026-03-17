@@ -160,7 +160,10 @@ color:white;
    
 
 }
-#container{
+*{
+    color: #ffff;
+}
+#container *{
     color: #ffff;
 }
 @media (min-width: 900px){
