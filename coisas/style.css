@@ -28,10 +28,12 @@ position: relative;
 }
 
 .card img{
-width:100%;
+width:90%;
 height:150px;
 object-fit:cover;
 border-radius: 20px;
+margin-top: 5px;
+margin: 0 2.3px;
 }
 
 .card h3{
